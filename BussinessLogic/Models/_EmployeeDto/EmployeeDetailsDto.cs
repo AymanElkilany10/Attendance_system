@@ -1,0 +1,27 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BussinessLogic.Models._EmployeeDto
+{
+    public class EmployeeDetailsDto
+    {
+        public int Id { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public int? Emp_Phone { get; set; }
+
+        public string Email { get; set; }
+
+        public bool? Is_Manager { get; set; }
+
+        public int? Dept_Id { get; set; }
+        public string? Department { get; set; }
+    }
+}
