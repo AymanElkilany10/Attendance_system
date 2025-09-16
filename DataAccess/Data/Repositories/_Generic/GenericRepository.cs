@@ -22,19 +22,18 @@ namespace DataAccess.Data.Repositories._GenericRepository
 
         public async Task<T?> GetByIdAsync(int id) => await _context.Set<T>().FindAsync(id);
 
-        public void Add(T entity)
-        {
-            _context.Set<T>().AddAsync(entity);
-        }
-        public void Update(T entity)
-        {
-            _context.Update(entity);
-        }
+        public async Task AddAsync(T entity) => await _context.Set<T>().AddAsync(entity);
 
-        public void Delete(T entity)
+        public async Task<bool> UpdateAsync(T entity) {
+              _context.Set<T>().Update(entity);
+            return await _context.SaveChangesAsync() > 0;
+                }
+
+        public async Task<bool> DeleteAsync(T entity)
         {
             entity.IsDeleted = true;
             _context.Update(entity);
+            return await _context.SaveChangesAsync() > 0;
         }
 
         
