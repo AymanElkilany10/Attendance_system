@@ -10,7 +10,8 @@ namespace DataAccess.Data.Repositories._GenericRepository
 {
     public interface IGenericRepository<T> where T : BaseEntity
     {
-        Task<IEnumerable<T>> GetAllAsync();
+        Task<IEnumerable<T>> GetAllASync();
+        IQueryable<T> GetAllAsIQueryable();
         Task<T?> GetByIdAsync(int id);
         void Add(T entity);
         void Update(T entity);

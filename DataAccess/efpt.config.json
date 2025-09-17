@@ -16,19 +16,7 @@
    "T4TemplatePath": null,
    "Tables": [
       {
-         "Name": "[dbo].[Attendance]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Department]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[dbo].[Employee]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[Sub_Company]",
          "ObjectType": 0
       }
    ],

@@ -17,14 +17,18 @@ namespace DataAccess.Data.Repositories._GenericRepository
         {
            _context = context;
         }
-        public async Task<IEnumerable<T>> GetAllAsync() => await _context.Set<T>().ToListAsync();
+        public async Task<IEnumerable<T>> GetAllASync()
+        { 
+            return await _context.Set<T>().Where(e => !e.IsDeleted).ToListAsync(); 
+        }
 
-
-        public async Task<T?> GetByIdAsync(int id) => await _context.Set<T>().FindAsync(id);
+        public IQueryable<T> GetAllAsIQueryable() => _context.Set<T>();
+        
+        public virtual async Task<T?> GetByIdAsync(int id) => await _context.Set<T>().FindAsync(id);
 
         public void Add(T entity)
         {
-            _context.Set<T>().AddAsync(entity);
+            _context.Set<T>().Add(entity);
         }
         public void Update(T entity)
         {
