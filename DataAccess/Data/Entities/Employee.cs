@@ -21,20 +21,25 @@ public partial class Employee : BaseEntity
     [StringLength(30)]
     public string Lname { get; set; }
 
-    public int Emp_Phone { get; set; }
+    public string? Emp_Phone { get; set; }
 
     [StringLength(50)]
     public string Email { get; set; }
 
     public bool Is_Manager { get; set; }
+    public int Line_Manager_Id { get; set; }
 
     [StringLength(50)]
     public string UserName { get; set; }
 
-    [StringLength(50)]
+    [StringLength(256)]
     public string PasswordHash { get; set; }
 
     public int Dept_Id { get; set; }
+    public Employee LineManager { get; set; }
+
+    [InverseProperty("Subordinates_LineManager")]
+    public ICollection<Employee> Subordinates { get; set; }
 
     [InverseProperty("Emp")]
     public virtual ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();

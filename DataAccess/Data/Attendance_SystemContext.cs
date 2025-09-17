@@ -51,8 +51,12 @@ public partial class Attendance_SystemContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Employee__3214EC07874F08C1");
 
-            entity.HasOne(d => d.Dept).WithMany(p => p.Employees).HasConstraintName("FK__Employee__Dept_I__3F466844");
+            entity.HasOne(d => d.LineManager).WithMany(p => p.Subordinates)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Employee__Line_M__5AEE82B9");
         });
+
+        OnModelCreatingPartial(modelBuilder);
 
         modelBuilder.Entity<Sub_Company>(entity =>
         {

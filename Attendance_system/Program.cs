@@ -1,4 +1,6 @@
 
+using BussinessLogic.Services;
+using BussinessLogic.ServicesAbstraction;
 using DataAccess.Data._UnitOfWork;
 using DataAccess.Data.Repositories._AttendanceRepository;
 using DataAccess.Data.Repositories._DepartmentRepository;
@@ -31,6 +33,7 @@ namespace Attendance_system
             builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
             builder.Services.AddScoped<ISubCompanyRepository, SubCompanyRepository>();
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
 
             var app = builder.Build();
 

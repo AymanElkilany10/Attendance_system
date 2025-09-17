@@ -22,12 +22,13 @@ namespace BussinessLogic.Models._EmployeeDto
         public string LastName { get; set; }
 
         [Phone]
-        public int? Emp_Phone { get; set; }
+        public string? Emp_Phone { get; set; }
 
         [EmailAddress]
         public string Email { get; set; }
 
-        public bool? Is_Manager { get; set; }
+        public bool Is_Manager { get; set; }
+        public int Line_Manager_Id { get; set; }    
 
         public string UserName { get; set; }
 
