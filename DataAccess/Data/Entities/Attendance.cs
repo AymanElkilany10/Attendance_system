@@ -20,10 +20,10 @@ public partial class Attendance : BaseEntity
     public DateOnly Att_Date { get; set; }
 
     [Column(TypeName = "datetime")]
-    public DateTime Check_in { get; set; }
+    public DateTime? Check_in { get; set; }
 
     [Column(TypeName = "datetime")]
-    public DateTime Check_out { get; set; }
+    public DateTime? Check_out { get; set; }
 
     public bool Is_Late { get; set; }
 

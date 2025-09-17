@@ -1,5 +1,6 @@
-﻿
-using DataAccess.Data.DbContext;
+
+﻿using DataAccess.Data.DbContext;
+
 using DataAccess.Data.Repositories._AttendanceRepository;
 using DataAccess.Data.Repositories._DepartmentRepository;
 using DataAccess.Data.Repositories._EmployeeRepository;
@@ -16,10 +17,13 @@ namespace DataAccess.Data._UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {
-        public IEmployeeRepository EmployeeRepository { get; }
-        public IDepartmentRepository DepartmentRepository { get; }
-        public IAttendanceRepository AttendanceRepository { get; }
-        public ISubCompanyRepository SubCompanyRepository { get; }
+
+        IEmployeeRepository EmployeeRepository { get; }
+        IDepartmentRepository DepartmentRepository { get; }
+        IAttendanceRepository AttendanceRepository { get; }
+        ISubCompanyRepository SubCompanyRepository { get; }
+
+
         public int Complete();
         public void Dispose();
     }
