@@ -1,4 +1,5 @@
 ﻿using BussinessLogic.Models._DepartmentDto;
+using BussinessLogic.ServicesAbstraction;
 using DataAccess.Data._UnitOfWork;
 using DataAccess.Data.DbContext;
 using DataAccess.Data.Repositories._DepartmentRepository;
@@ -11,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BussinessLogic.DepartmentServices
+namespace BussinessLogic.Services
 {
     public class DepartmentService : IDepartmentService
     {

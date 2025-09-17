@@ -1,4 +1,5 @@
 ﻿using BussinessLogic.Models._SubCompanyDto;
+using BussinessLogic.ServicesAbstraction;
 using DataAccess.Data._UnitOfWork;
 using DataAccess.Data.DbContext;
 using System;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BussinessLogic.Sub_CompanyServices
+namespace BussinessLogic.Services
 {
     public class Sub_CompanyService : ISub_CompanyService
     {

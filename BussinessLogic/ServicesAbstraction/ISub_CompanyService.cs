@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BussinessLogic.Sub_CompanyServices
+namespace BussinessLogic.ServicesAbstraction
 {
     public interface ISub_CompanyService
     {

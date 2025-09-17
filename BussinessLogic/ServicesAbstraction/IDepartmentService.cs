@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BussinessLogic.DepartmentServices
+namespace BussinessLogic.ServicesAbstraction
 {
     public interface IDepartmentService
     {
