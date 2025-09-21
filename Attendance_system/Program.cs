@@ -38,6 +38,7 @@ namespace Attendance_system
             builder.Services.AddScoped<IDepartmentService, DepartmentService>();
             builder.Services.AddScoped<ISub_CompanyService, Sub_CompanyService>();
             builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
+            builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 
 
             var app = builder.Build();

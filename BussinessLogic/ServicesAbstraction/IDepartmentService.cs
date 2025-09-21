@@ -1,24 +1,20 @@
 ﻿using BussinessLogic.Models._DepartmentDto;
 using DataAccess.Data.DbContext;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BussinessLogic.ServicesAbstraction
 {
     public interface IDepartmentService
     {
-        Task<IEnumerable<Department>> GetAllDepartmentsASync();
+        IEnumerable<DepartmentDetailsDto> GetAllDepartments();
 
-       Task<Department?> GetByIdAsync(int id);
+        Task<DepartmentDetailsDto?> GetByIdAsync(int id);
 
-        Task CreateDepartmentASync(Department department);
+        Task<int> CreateDepartment(CreatedDepartmentDto dto);
 
-        Task<bool> UpdateDepartmentAsync(int id,UpdatedDepartmentDto Dto);
+        Task<bool> UpdateDepartment(UpdatedDepartmentDto dto, int id);
 
-        Task<bool> DeleteDepartmentAsync(int id);
-
+        Task<bool> DeleteDepartment(int id);
     }
 }

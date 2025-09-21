@@ -2,47 +2,81 @@
 using BussinessLogic.ServicesAbstraction;
 using DataAccess.Data._UnitOfWork;
 using DataAccess.Data.DbContext;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BussinessLogic.Services
+public class Sub_CompanyService : ISub_CompanyService
 {
-    public class Sub_CompanyService : ISub_CompanyService
+    private readonly IUnitOfWork _unitOfWork;
+
+    public Sub_CompanyService(IUnitOfWork unitOfWork)
     {
-        private readonly IUnitOfWork _unitOfWork;
+        _unitOfWork = unitOfWork;
+    }
 
-        public Sub_CompanyService(IUnitOfWork unitOfWork)
+    public async Task<IEnumerable<SubCompanyDetailsDto>> GetAllAsync()
+    {
+        var subs = await _unitOfWork.SubCompanyRepository.GetAllASync();
+        return subs
+            .Where(e => !e.IsDeleted)
+            .Select(s => new SubCompanyDetailsDto
+            {
+                Company_Id = s.Id,
+                Company_Name = s.Sub_Name,
+                Company_Address = s.Address,
+                Company_Phone = s.Sub_Phone,
+                CEO_Id = s.CEO_id
+            });
+    }
+
+    public async Task<SubCompanyDetailsDto?> GetByIdAsync(int id)
+    {
+        var sub = await _unitOfWork.SubCompanyRepository.GetByIdAsync(id);
+        if (sub == null) return null;
+
+        return new SubCompanyDetailsDto
         {
-            _unitOfWork = unitOfWork;
-        }
+            Company_Id = sub.Id,
+            Company_Name = sub.Sub_Name,
+            Company_Address = sub.Address,
+            Company_Phone = sub.Sub_Phone,
+            CEO_Id = sub.CEO_id
+        };
+    }
 
-        async Task ISub_CompanyService.AddAsync(Sub_Company sub_Company)
+    public async Task<int> AddAsync(CreatedSubCompanyDto dto)
+    {
+        var entity = new Sub_Company
         {
-            await _unitOfWork.SubCompanyRepository.AddAsync(sub_Company);
-            _unitOfWork.Complete();
-        }
-        async Task<bool> ISub_CompanyService.DeleteAsync(int id)
-        {
-            var sub = await _unitOfWork.SubCompanyRepository.GetByIdAsync(id);
-            if (sub == null) return false;
-            await _unitOfWork.SubCompanyRepository.DeleteAsync(sub);
-            return true;
-        }
+            Sub_Name = dto.Company_Name,
+            Address = dto.Company_Address,
+            Sub_Phone = dto.Company_Phone,
+            CEO_id = dto.CEO_Id
+        };
 
-        async Task<IEnumerable<Sub_Company>> ISub_CompanyService.GetAllAsync() => await _unitOfWork.SubCompanyRepository.GetAllASync();
+        await _unitOfWork.SubCompanyRepository.AddAsync(entity);
+        _unitOfWork.Complete();
+        return entity.Id; 
+    }
 
-        async Task<Sub_Company?> ISub_CompanyService.GetByIdAsync(int id) => await _unitOfWork.SubCompanyRepository.GetByIdAsync(id);
+    public async Task<bool> UpdateAsync(int id, UpdatedSubCompanyDto dto)
+    {
+        var sub = await _unitOfWork.SubCompanyRepository.GetByIdAsync(id);
+        if (sub == null) return false;
 
-        async Task<bool> ISub_CompanyService.UpdateAsync(int id, UpdatedSubCompanyDto dto)
-        {
-            var sub = await _unitOfWork.SubCompanyRepository.GetByIdAsync(id);
-            if (sub == null) return false;
-            if (!string.IsNullOrEmpty(dto.Company_Name))
-                sub.Sub_Name = dto.Company_Name;
-            return await _unitOfWork.SubCompanyRepository.UpdateAsync(sub);
-        }
+        sub.Sub_Name = dto.Company_Name;
+        sub.Address = dto.Company_Address;
+        sub.Sub_Phone = dto.Company_Phone;
+        sub.CEO_id = dto.CEO_Id;
+
+        await _unitOfWork.SubCompanyRepository.UpdateAsync(sub);
+        return _unitOfWork.Complete() > 0;
+    }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var sub = await _unitOfWork.SubCompanyRepository.GetByIdAsync(id);
+        if (sub == null) return false;
+
+        await _unitOfWork.SubCompanyRepository.DeleteAsync(sub);
+        return _unitOfWork.Complete() > 0;
     }
 }

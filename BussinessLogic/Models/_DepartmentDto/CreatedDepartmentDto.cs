@@ -10,6 +10,6 @@ namespace BussinessLogic.Models._DepartmentDto
     {
         public string dept_name { get; set; }
         public int sub_id { get; set; }
-        public int Manager_Id { get; set; }
+        public int? Manager_Id { get; set; }
     }
 }
