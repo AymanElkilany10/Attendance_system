@@ -10,5 +10,6 @@ namespace BussinessLogic.ServicesAbstraction
     public interface IAttendanceService
     {
         Task<EmployeeAttendanceReportDto?> GetEmployeeAttendanceReport(int employeeId);
+        public  Task<List<EmployeeAttendanceReportDto>> GetReportsForManager(int managerId);
     }
 }

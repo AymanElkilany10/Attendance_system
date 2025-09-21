@@ -27,7 +27,7 @@ public partial class Employee : BaseEntity
     public string Email { get; set; }
 
     public bool Is_Manager { get; set; }
-    public int Line_Manager_Id { get; set; }
+    public int? Line_Manager_Id { get; set; }
 
     [StringLength(50)]
     public string UserName { get; set; }
@@ -35,10 +35,13 @@ public partial class Employee : BaseEntity
     [StringLength(256)]
     public string PasswordHash { get; set; }
 
-    public int Dept_Id { get; set; }
+    public int? Dept_Id { get; set; }
+
+    [ForeignKey("Line_Manager_Id")]
+    [InverseProperty("Subordinates")]
     public Employee LineManager { get; set; }
 
-    [InverseProperty("Subordinates_LineManager")]
+    [InverseProperty("LineManager")]
     public ICollection<Employee> Subordinates { get; set; }
 
     [InverseProperty("Emp")]

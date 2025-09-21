@@ -9,7 +9,8 @@ namespace BussinessLogic.Models._EmployeeDto
 {
     public class EmployeeDetailsDto
     {
-        public int Id { get; set; }
+        [Required]
+        public int Emp_Id { get; set; }
 
         public string FirstName { get; set; }
 
@@ -20,7 +21,7 @@ namespace BussinessLogic.Models._EmployeeDto
         public string Email { get; set; }
 
         public bool? Is_Manager { get; set; }
-        public int Line_Manager_Id { get; set; }
+        public int? Line_Manager_Id { get; set; }
 
         public int? Dept_Id { get; set; }
         public string? Department { get; set; }

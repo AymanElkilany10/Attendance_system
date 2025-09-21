@@ -28,13 +28,13 @@ namespace BussinessLogic.Models._EmployeeDto
         public string Email { get; set; }
 
         public bool Is_Manager { get; set; }
-        public int Line_Manager_Id { get; set; }    
+        public int? Line_Manager_Id { get; set; }    
 
         public string UserName { get; set; }
 
         public string Password { get; set; }
 
-        public int Dept_Id { get; set; }
+        public int? Dept_Id { get; set; }
 
     }
 }

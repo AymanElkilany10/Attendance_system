@@ -1,4 +1,5 @@
 ﻿using BussinessLogic.Models._AttendanceDto;
+using BussinessLogic.Models._ManagerSummary;
 using BussinessLogic.ServicesAbstraction;
 using DataAccess.Data._UnitOfWork;
 using Microsoft.Data.SqlClient;
@@ -51,6 +52,106 @@ namespace BussinessLogic.Services
                 Records = records
             };
         }
+
+        public async Task<List<EmployeeAttendanceReportDto>> GetReportsForManager(int managerId)
+        {
+            var manager = await _unitOfWork.EmployeeRepository.GetByIdAsync(managerId);
+
+            if (manager == null || !manager.Is_Manager)
+                return new List<EmployeeAttendanceReportDto>();
+            
+
+            var connection = _context.Database.GetDbConnection();
+            var reportsDict = new Dictionary<int, EmployeeAttendanceReportDto>();
+
+            await using var command = connection.CreateCommand();
+            command.CommandText = "GetAttendanceReportsByManager";
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.Add(new SqlParameter("@ManagerId", SqlDbType.Int) { Value = managerId });
+
+            if (connection.State != ConnectionState.Open)
+                await connection.OpenAsync();
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                int empId = reader.GetInt32(0);
+                string fullName = reader.GetString(1);
+
+                var record = new AttendanceRecordDto
+                {
+                    Date = DateOnly.FromDateTime(reader.GetDateTime(2)),
+                    CheckIn = reader.IsDBNull(3) ? null : reader.GetDateTime(3),
+                    CheckOut = reader.IsDBNull(4) ? null : reader.GetDateTime(4),
+                    IsLate = reader.GetBoolean(5),
+                    IsAbsent = reader.GetBoolean(6),
+                    Status = reader.GetString(7),
+                    DayDeduction = 0m
+                };
+
+                if (!reportsDict.TryGetValue(empId, out var report))
+                {
+                    report = new EmployeeAttendanceReportDto
+                    {
+                        EmployeeId = empId,
+                        FullName = fullName,
+                        Records = new List<AttendanceRecordDto>()
+                    };
+                    reportsDict.Add(empId, report);
+                }
+
+                report.Records.Add(record);
+            }
+
+            foreach (var report in reportsDict.Values)
+            {
+                foreach (var rec in report.Records)
+                {
+                    rec.DayDeduction = rec.IsAbsent
+                        ? 1m
+                        : (rec.CheckIn.HasValue ? CalculateDayDeduction(rec.CheckIn.Value) : 1m);
+                }
+                ApplyMonthlyAbsenceRules(report.Records);
+                ApplyYearlyAbsenceRules(report.Records, null, out decimal totalDeduction);
+
+                report.TotalDays = report.Records.Count;
+                report.DaysPresent = report.Records.Count(r => !r.IsAbsent);
+                report.DaysAbsent = report.Records.Count(r => r.IsAbsent);
+                report.DaysLate = report.Records.Count(r => r.IsLate);
+                report.TotalDeduction = totalDeduction;
+            }
+
+            return reportsDict.Values.ToList();
+        }
+
+        public async Task<ManagerAttendanceSummaryDto> GetManagerOwnSummary(int managerId)
+        {
+            var manager = await _unitOfWork.EmployeeRepository.GetByIdAsync(managerId);
+            if (manager == null)
+                return null;
+
+            var report = await GetEmployeeAttendanceReport(managerId);
+            if (report == null)
+                return null;
+
+            int totalDays = report.TotalDays;
+
+            decimal percentAbsent = totalDays == 0 ? 0 : ((decimal)report.DaysAbsent / totalDays) * 100;
+            decimal percentLate = totalDays == 0 ? 0 : ((decimal)report.DaysLate / totalDays) * 100;
+
+            return new ManagerAttendanceSummaryDto
+            {
+                ManagerId = manager.Id,
+                ManagerName = $"{manager.Fname} {manager.Lname}",
+                TotalEmployees = 1,
+                PercentAbsent = percentAbsent,
+                PercentLate = percentLate,
+                ReportDate = DateTime.Now
+            };
+        }
+
+
 
         private decimal CalculateDayDeduction(DateTime checkIn)
         {

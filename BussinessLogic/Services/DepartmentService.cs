@@ -31,9 +31,9 @@ namespace BussinessLogic.Services
             return await _unitOfWork.DepartmentRepository.GetByIdAsync(id);
         }
 
-            public async Task CreateDepartmentASync(Department department) {
+        public async Task CreateDepartmentASync(Department department) {
             await _unitOfWork.DepartmentRepository.AddAsync(department);
-             _unitOfWork.Complete();
+            _unitOfWork.Complete();
         }
 
         public async Task<bool> UpdateDepartmentAsync(int id,UpdatedDepartmentDto Dto)

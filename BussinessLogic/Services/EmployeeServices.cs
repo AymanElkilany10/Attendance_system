@@ -27,12 +27,13 @@ namespace BussinessLogic.Services
                 .Include(e => e.Dept)
                 .Select(employee => new EmployeeDetailsDto
                 {
-                    Id = employee.Id,
+                    Emp_Id = employee.Id,
                     FirstName = employee.Fname,
                     LastName = employee.Lname,
                     Emp_Phone = employee.Emp_Phone,
                     Email = employee.Email,
                     Is_Manager = employee.Is_Manager,
+                    Line_Manager_Id = employee.Line_Manager_Id,
                     Dept_Id = employee.Dept_Id,
                     Department = employee.Dept != null ? employee.Dept.dept_name : null
                 }).ToList();
@@ -46,12 +47,13 @@ namespace BussinessLogic.Services
             if (employee is not null)
                return new EmployeeDetailsDto()
                {
-                   Id = employee.Id,
+                   Emp_Id = employee.Id,
                    FirstName = employee.Fname,
                    LastName = employee.Lname,
                    Emp_Phone = employee.Emp_Phone,
                    Email = employee.Email,
                    Is_Manager = employee.Is_Manager,
+                   Line_Manager_Id = employee.Line_Manager_Id,
                    Dept_Id = employee.Dept_Id,
                    Department = employee.Dept != null ? employee.Dept.dept_name : null
                };
@@ -66,6 +68,7 @@ namespace BussinessLogic.Services
                 Emp_Phone = employee.Emp_Phone,
                 Email = employee.Email,
                 Is_Manager = employee.Is_Manager,
+                Line_Manager_Id = employee.Line_Manager_Id,
                 UserName = employee.UserName,
                 PasswordHash = employee.Password,
                 Dept_Id = employee.Dept_Id
@@ -88,6 +91,7 @@ namespace BussinessLogic.Services
                 Emp_Phone = employee.Emp_Phone,
                 Email = employee.Email,
                 Is_Manager = employee.Is_Manager,
+                Line_Manager_Id = employee.Line_Manager_Id,
                 UserName = employee.UserName,
                 PasswordHash = employee.Password,
                 Dept_Id = employee.Dept_Id
