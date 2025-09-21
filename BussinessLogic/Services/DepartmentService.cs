@@ -24,7 +24,7 @@ namespace BussinessLogic.Services
 
         public async Task<IEnumerable<Department>> GetAllDepartmentsASync()
         {
-            return await _unitOfWork.DepartmentRepository.GetAllAsync();
+            return await _unitOfWork.DepartmentRepository.GetAllASync();
         }
 
         public async Task<Department?> GetByIdAsync(int id ) {

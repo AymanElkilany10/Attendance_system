@@ -32,7 +32,7 @@ namespace DataAccess.Data.Repositories._GenericRepository
         public async Task<bool> UpdateAsync(T entity) {
               _context.Set<T>().Update(entity);
             return await _context.SaveChangesAsync() > 0;
-                }
+        }
 
   
 

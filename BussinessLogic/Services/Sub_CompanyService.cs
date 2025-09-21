@@ -32,7 +32,7 @@ namespace BussinessLogic.Services
             return true;
         }
 
-        async Task<IEnumerable<Sub_Company>> ISub_CompanyService.GetAllAsync() => await _unitOfWork.SubCompanyRepository.GetAllAsync();
+        async Task<IEnumerable<Sub_Company>> ISub_CompanyService.GetAllAsync() => await _unitOfWork.SubCompanyRepository.GetAllASync();
 
         async Task<Sub_Company?> ISub_CompanyService.GetByIdAsync(int id) => await _unitOfWork.SubCompanyRepository.GetByIdAsync(id);
 

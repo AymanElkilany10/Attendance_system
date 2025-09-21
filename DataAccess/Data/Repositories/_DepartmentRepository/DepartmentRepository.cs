@@ -14,10 +14,5 @@ namespace DataAccess.Data.Repositories._DepartmentRepository
         {
             
         }
-
-        Task IDepartmentRepository.DeleteAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -71,7 +71,7 @@ namespace BussinessLogic.Services
                 Dept_Id = employee.Dept_Id
             };
 
-            _unitOfWork.EmployeeRepository.Add(Emp);
+            _unitOfWork.EmployeeRepository.AddAsync(Emp);
             return _unitOfWork.Complete();
         }
         
@@ -93,7 +93,7 @@ namespace BussinessLogic.Services
                 Dept_Id = employee.Dept_Id
             };
 
-            _unitOfWork.EmployeeRepository.Update(Emp);
+            _unitOfWork.EmployeeRepository.UpdateAsync(Emp);
             return _unitOfWork.Complete();
         }
 
@@ -102,7 +102,7 @@ namespace BussinessLogic.Services
             var employee = _unitOfWork.EmployeeRepository.GetByIdAsync(id).Result;
 
             if (employee is not null)
-                _unitOfWork.EmployeeRepository.Delete(employee);
+                _unitOfWork.EmployeeRepository.DeleteAsync(employee);
 
             return _unitOfWork.Complete() > 0;
         }

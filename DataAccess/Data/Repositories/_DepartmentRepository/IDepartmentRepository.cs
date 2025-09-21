@@ -10,6 +10,5 @@ namespace DataAccess.Data.Repositories._DepartmentRepository
 {
     public interface IDepartmentRepository : IGenericRepository<Department>
     {
-        Task DeleteAsync(int id);
     }
 }
