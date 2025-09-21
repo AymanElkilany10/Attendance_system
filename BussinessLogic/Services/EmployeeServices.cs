@@ -57,7 +57,7 @@ namespace BussinessLogic.Services
                };
             return null;
         }
-        public int CreateEmployee(CreatedEmployeeDto employee)
+        public async Task<int> CreateEmployee(CreatedEmployeeDto employee)
         {
             var Emp = new Employee()
             {
@@ -71,11 +71,11 @@ namespace BussinessLogic.Services
                 Dept_Id = employee.Dept_Id
             };
 
-            _unitOfWork.EmployeeRepository.AddAsync(Emp);
-            return _unitOfWork.Complete();
+            await _unitOfWork.EmployeeRepository.AddAsync(Emp);
+            return  _unitOfWork.Complete();
         }
         
-        public int UpdateEmployee(UpdatedEmployeeDto employee, int id)
+        public async Task<int> UpdateEmployee(UpdatedEmployeeDto employee, int id)
         {
             var em = _unitOfWork.EmployeeRepository.GetByIdAsync(id);
             if (em is null || id != em.Id)
@@ -93,16 +93,16 @@ namespace BussinessLogic.Services
                 Dept_Id = employee.Dept_Id
             };
 
-            _unitOfWork.EmployeeRepository.UpdateAsync(Emp);
+            await _unitOfWork.EmployeeRepository.UpdateAsync(Emp);
             return _unitOfWork.Complete();
         }
 
-        public bool DeleteEmployee(int id)
+        public async Task<bool> DeleteEmployee(int id)
         {
             var employee = _unitOfWork.EmployeeRepository.GetByIdAsync(id).Result;
 
             if (employee is not null)
-                _unitOfWork.EmployeeRepository.DeleteAsync(employee);
+               await _unitOfWork.EmployeeRepository.DeleteAsync(employee);
 
             return _unitOfWork.Complete() > 0;
         }

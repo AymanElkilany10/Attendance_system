@@ -11,8 +11,8 @@ namespace BussinessLogic.ServicesAbstraction
     {
         IEnumerable<EmployeeDetailsDto> GetAllEmployees();
         Task<EmployeeDetailsDto?> GetEmployeeById(int id);
-        int CreateEmployee(CreatedEmployeeDto employee);
-        int UpdateEmployee(UpdatedEmployeeDto employee, int id); 
-        bool DeleteEmployee(int id);
+        Task<int> CreateEmployee(CreatedEmployeeDto employee);
+        Task<int> UpdateEmployee(UpdatedEmployeeDto employee, int id); 
+        Task<bool> DeleteEmployee(int id);
     }
 }
