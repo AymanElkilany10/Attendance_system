@@ -11,7 +11,7 @@ namespace DataAccess.Data.Repositories._GenericRepository
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
-        private readonly Attendance_SystemContext _context;
+        protected readonly Attendance_SystemContext _context;
 
         public GenericRepository(Attendance_SystemContext context)
         {

@@ -1,6 +1,7 @@
 ﻿using BussinessLogic.Models._DepartmentDto;
 using BussinessLogic.ServicesAbstraction;
 using BussinessLogic.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Attendance_system.web.Controllers
@@ -16,6 +17,7 @@ namespace Attendance_system.web.Controllers
             _departmentService = departmentService;
         }
 
+        [Authorize(Roles = "CEO,DepartmentManager")]
         [HttpGet("GetAllDepartments")]
         public IActionResult GetAllDepartments()
         {
@@ -30,6 +32,7 @@ namespace Attendance_system.web.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "CEO,DepartmentManager")]
         [HttpGet("GetDepartmentById/{id}")]
         public async Task<IActionResult> GetDepartmentById(int id)
         {
@@ -55,6 +58,7 @@ namespace Attendance_system.web.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "CEO,DepartmentManager")]
         [HttpPost("CreateDepartment")]
         public async Task<IActionResult> CreateDepartment([FromBody] CreatedDepartmentDto dto)
         {
@@ -70,6 +74,7 @@ namespace Attendance_system.web.Controllers
             return CreatedAtAction(nameof(GetDepartmentById), new { id = newDeptId }, response);
         }
 
+        [Authorize(Roles = "CEO,DepartmentManager")]
         [HttpPut("UpdateDepartment/{id}")]
         public async Task<IActionResult> UpdateDepartment(int id, [FromBody] UpdatedDepartmentDto model)
         {
@@ -86,6 +91,7 @@ namespace Attendance_system.web.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "CEO,DepartmentManager")]
         [HttpDelete("DeleteDepartment/{id}")]
         public async Task<IActionResult> DeleteDepartment(int id)
         {
@@ -101,5 +107,6 @@ namespace Attendance_system.web.Controllers
 
             return Ok(response);
         }
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using BussinessLogic.ServicesAbstraction;
 using BussinessLogic.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +17,7 @@ namespace Attendance_system.web.Controllers
             _attendanceService = attendanceService;
         }
 
-
+        [Authorize(Roles = "LineManager")]
         [HttpGet("employee/{employeeId}")]
         public async Task<IActionResult> GetEmployeeAttendanceReport(int employeeId)
         {
@@ -43,7 +44,7 @@ namespace Attendance_system.web.Controllers
         }
 
 
-
+        [Authorize(Roles = "DepartmentManager")]
         [HttpGet("manager-report/{managerId}")]
         public async Task<IActionResult> GetManagerAttendanceReport(int managerId)
         {

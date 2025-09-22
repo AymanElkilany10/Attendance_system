@@ -1,6 +1,7 @@
 ﻿using BussinessLogic.Models._SubCompanyDto;
 using BussinessLogic.ServicesAbstraction;
 using BussinessLogic.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Attendance_system.web.Controllers
@@ -16,6 +17,7 @@ namespace Attendance_system.web.Controllers
             _subCompanyService = subCompanyService;
         }
 
+        [Authorize(Roles = "CEO")]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
@@ -32,6 +34,7 @@ namespace Attendance_system.web.Controllers
             return StatusCode(response.Code, response);
         }
 
+        [Authorize(Roles = "CEO")]
         [HttpGet("GetById/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -48,6 +51,7 @@ namespace Attendance_system.web.Controllers
             return StatusCode(response.Code, response);
         }
 
+        [Authorize(Roles = "CEO")]
         [HttpPost("Create")]
         public async Task<IActionResult> Create([FromBody] CreatedSubCompanyDto dto)
         {
@@ -75,6 +79,7 @@ namespace Attendance_system.web.Controllers
             return StatusCode(201, response);
         }
 
+        [Authorize(Roles = "CEO")]
         [HttpPut("Update/{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdatedSubCompanyDto dto)
         {
@@ -91,6 +96,7 @@ namespace Attendance_system.web.Controllers
             return StatusCode(response.Code, response);
         }
 
+        [Authorize(Roles = "CEO")]
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
