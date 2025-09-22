@@ -27,6 +27,9 @@ namespace BussinessLogic.Models._EmployeeDto
         [EmailAddress]
         public string Email { get; set; }
 
+        public string Role { get; set; } = "Employee";
+
+        public DateTime Hire_Date { get; set; } = DateTime.Now;
         public bool Is_Manager { get; set; }
         public int? Line_Manager_Id { get; set; }    
 
