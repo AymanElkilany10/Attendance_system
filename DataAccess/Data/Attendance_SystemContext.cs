@@ -54,6 +54,9 @@ public partial class Attendance_SystemContext : DbContext
             entity.HasOne(d => d.LineManager).WithMany(p => p.Subordinates)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Employee__Line_M__5AEE82B9");
+
+            entity.Property(e => e.Role)
+                .HasDefaultValue("Employee");
         });
 
         OnModelCreatingPartial(modelBuilder);
