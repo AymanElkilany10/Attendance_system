@@ -73,5 +73,85 @@ namespace Attendance_system.web.Controllers
             return Ok(successResponse);
         }
 
+
+        [HttpGet("department-manager/line-manager-summaries")]
+        public async Task<IActionResult> GetLineManagerSummaries(
+            [FromQuery] int departmentManagerId,
+            [FromQuery] DateTime startDate,
+            [FromQuery] DateTime endDate)
+        {
+            if (startDate > endDate)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    Code = 400,
+                    Status = "Bad Request",
+                    Message = "Start date cannot be later than end date.",
+                    Data = null
+                });
+            }
+
+            var summaries = await _attendanceService.GetLineManagerSummariesByDepartmentManagerAsync(departmentManagerId, startDate, endDate);
+
+            if (summaries == null || !summaries.Any())
+            {
+                return NotFound(new ApiResponse<object>
+                {
+                    Code = 404,
+                    Status = "Not Found",
+                    Message = "No line manager summaries found for this department manager.",
+                    Data = null
+                });
+            }
+
+            return Ok(new ApiResponse<object>
+            {
+                Code = 200,
+                Status = "Success",
+                Message = "Line manager summaries retrieved successfully.",
+                Data = summaries
+            });
+        }
+
+
+        [HttpGet("ceo/department-summaries")]
+        public async Task<IActionResult> GetDepartmentSummariesForCeo(
+            [FromQuery] DateTime startDate,
+            [FromQuery] DateTime endDate)
+        {
+            if (startDate > endDate)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    Code = 400,
+                    Status = "Bad Request",
+                    Message = "Start date cannot be later than end date.",
+                    Data = null
+                });
+            }
+
+            var summaries = await _attendanceService.GetDepartmentSummariesForCeoAsync(startDate, endDate);
+
+            if (summaries == null || !summaries.Any())
+            {
+                return NotFound(new ApiResponse<object>
+                {
+                    Code = 404,
+                    Status = "Not Found",
+                    Message = "No department summaries found.",
+                    Data = null
+                });
+            }
+
+            return Ok(new ApiResponse<object>
+            {
+                Code = 200,
+                Status = "Success",
+                Message = "Department summaries retrieved successfully.",
+                Data = summaries
+            });
+        }
+
+
     }
 }

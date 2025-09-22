@@ -125,31 +125,119 @@ namespace BussinessLogic.Services
             return reportsDict.Values.ToList();
         }
 
-        public async Task<ManagerAttendanceSummaryDto> GetManagerOwnSummary(int managerId)
+
+
+        public async Task<List<LineManagerTeamSummaryDto>> GetLineManagerSummariesByDepartmentManagerAsync(
+        int departmentManagerId, DateTime startDate, DateTime endDate)
         {
-            var manager = await _unitOfWork.EmployeeRepository.GetByIdAsync(managerId);
-            if (manager == null)
-                return null;
+            var deptManager = await _unitOfWork.EmployeeRepository.GetByIdAsync(departmentManagerId);
+            if (deptManager == null || !deptManager.Is_Manager)
+                return new List<LineManagerTeamSummaryDto>();
 
-            var report = await GetEmployeeAttendanceReport(managerId);
-            if (report == null)
-                return null;
+            var allEmployees = await _unitOfWork.EmployeeRepository.GetAllASync();
 
-            int totalDays = report.TotalDays;
+            var lineManagers = allEmployees
+                .Where(e => e.Line_Manager_Id == departmentManagerId && e.Is_Manager)
+                .ToList();
 
-            decimal percentAbsent = totalDays == 0 ? 0 : ((decimal)report.DaysAbsent / totalDays) * 100;
-            decimal percentLate = totalDays == 0 ? 0 : ((decimal)report.DaysLate / totalDays) * 100;
+            var summaries = new List<LineManagerTeamSummaryDto>();
 
-            return new ManagerAttendanceSummaryDto
+            foreach (var lm in lineManagers)
             {
-                ManagerId = manager.Id,
-                ManagerName = $"{manager.Fname} {manager.Lname}",
-                TotalEmployees = 1,
-                PercentAbsent = percentAbsent,
-                PercentLate = percentLate,
-                ReportDate = DateTime.Now
-            };
+                var reports = await GetReportsForManager(lm.Id);
+                foreach (var rep in reports)
+                {
+                    rep.Records = rep.Records
+                        .Where(r => r.Date.ToDateTime(TimeOnly.MinValue) >= startDate &&
+                                    r.Date.ToDateTime(TimeOnly.MinValue) <= endDate)
+                        .ToList();
+                }
+
+                int totalEmployees = reports.Count;
+                int totalWorkingDays = reports.Sum(r => r.Records.Count);
+                int totalAbsentDays = reports.Sum(r => r.Records.Count(r2 => r2.IsAbsent));
+                int totalLateDays = reports.Sum(r => r.Records.Count(r2 => r2.IsLate));
+
+                decimal percentAbsent = totalWorkingDays == 0
+                    ? 0
+                    : (decimal)totalAbsentDays / totalWorkingDays * 100m;
+
+                decimal percentLate = totalWorkingDays == 0
+                    ? 0
+                    : (decimal)totalLateDays / totalWorkingDays * 100m;
+
+                summaries.Add(new LineManagerTeamSummaryDto
+                {
+                    LineManagerId = lm.Id,
+                    LineManagerName = $"{lm.Fname} {lm.Lname}",
+                    TotalEmployees = totalEmployees,
+                    PercentAbsent = percentAbsent,
+                    PercentLate = percentLate,
+                    ReportDate = DateTime.Now
+                });
+            }
+
+            return summaries;
         }
+
+
+        public async Task<List<DepartmentSummaryForCeoDto>> GetDepartmentSummariesForCeoAsync(DateTime startDate, DateTime endDate)
+        {
+
+            var employees = await _unitOfWork.EmployeeRepository.GetAllASync();
+
+            var groupedByDept = employees
+                .Where(e => e.Dept_Id != null)
+                .GroupBy(e => e.Dept_Id)
+                .ToList();
+
+            var summaries = new List<DepartmentSummaryForCeoDto>();
+
+            foreach (var grp in groupedByDept)
+            {
+                int deptId = grp.Key.Value;
+                string deptName = grp.First().Dept?.dept_name ?? "Unknown";
+
+                int totalEmployees = grp.Count();
+
+                int totalWorkingDays = 0;
+                int totalAbsentDays = 0;
+                int totalLateDays = 0;
+
+                foreach (var emp in grp)
+                {
+                    var records = await GetAttendanceRecordsFromSP(emp.Id);
+                    var filtered = records
+                        .Where(r => r.Date.ToDateTime(TimeOnly.MinValue) >= startDate
+                                 && r.Date.ToDateTime(TimeOnly.MinValue) <= endDate)
+                        .ToList();
+
+                    totalWorkingDays += filtered.Count;
+                    totalAbsentDays += filtered.Count(r => r.IsAbsent);
+                    totalLateDays += filtered.Count(r => r.IsLate);
+                }
+
+                decimal percentAbsent = totalWorkingDays == 0
+                    ? 0
+                    : (decimal)totalAbsentDays / totalWorkingDays * 100m;
+                decimal percentLate = totalWorkingDays == 0
+                    ? 0
+                    : (decimal)totalLateDays / totalWorkingDays * 100m;
+
+                summaries.Add(new DepartmentSummaryForCeoDto
+                {
+                    DepartmentId = deptId,
+                    DepartmentName = deptName,
+                    TotalEmployees = totalEmployees,
+                    PercentAbsent = percentAbsent,
+                    PercentLate = percentLate,
+                    ReportDate = DateTime.Now
+                });
+            }
+
+            return summaries;
+        }
+
 
 
 
