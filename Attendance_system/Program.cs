@@ -74,6 +74,8 @@ namespace Attendance_system
                 app.UseSwaggerUI();
             }
 
+            app.UseMiddleware<ErrorHandling>();
+
             app.UseHttpsRedirection();
 
             app.UseAuthentication();

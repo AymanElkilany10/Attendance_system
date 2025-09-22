@@ -17,7 +17,7 @@ namespace Attendance_system.web.Controllers
             _departmentService = departmentService;
         }
 
-        [Authorize(Roles = "CEO,DepartmentManager")]
+        [Authorize(Roles = "CEO")]
         [HttpGet("GetAllDepartments")]
         public IActionResult GetAllDepartments()
         {
@@ -32,7 +32,7 @@ namespace Attendance_system.web.Controllers
             return Ok(response);
         }
 
-        [Authorize(Roles = "CEO,DepartmentManager")]
+        [Authorize(Roles = "CEO")]
         [HttpGet("GetDepartmentById/{id}")]
         public async Task<IActionResult> GetDepartmentById(int id)
         {
@@ -58,7 +58,7 @@ namespace Attendance_system.web.Controllers
             return Ok(response);
         }
 
-        [Authorize(Roles = "CEO,DepartmentManager")]
+        [Authorize(Roles = "CEO")]
         [HttpPost("CreateDepartment")]
         public async Task<IActionResult> CreateDepartment([FromBody] CreatedDepartmentDto dto)
         {
@@ -74,7 +74,7 @@ namespace Attendance_system.web.Controllers
             return CreatedAtAction(nameof(GetDepartmentById), new { id = newDeptId }, response);
         }
 
-        [Authorize(Roles = "CEO,DepartmentManager")]
+        [Authorize(Roles = "CEO")]
         [HttpPut("UpdateDepartment/{id}")]
         public async Task<IActionResult> UpdateDepartment(int id, [FromBody] UpdatedDepartmentDto model)
         {
@@ -91,7 +91,7 @@ namespace Attendance_system.web.Controllers
             return Ok(response);
         }
 
-        [Authorize(Roles = "CEO,DepartmentManager")]
+        [Authorize(Roles = "CEO")]
         [HttpDelete("DeleteDepartment/{id}")]
         public async Task<IActionResult> DeleteDepartment(int id)
         {

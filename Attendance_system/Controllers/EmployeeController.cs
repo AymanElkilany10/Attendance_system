@@ -20,7 +20,7 @@ namespace Attendance_system.web.Controllers
             _employeeServices = employeeServices;
         }
 
-        [Authorize(Roles = "CEO,DepartmentManager,LineManager")]
+        [Authorize(Roles = "DepartmentManager,LineManager")]
         [HttpGet]
         public ActionResult GetAllEmployees()
         {
@@ -36,7 +36,7 @@ namespace Attendance_system.web.Controllers
             return Ok(response);
         }
 
-        [Authorize(Roles = "CEO,DepartmentManager,LineManager")]
+        [Authorize(Roles = "DepartmentManager,LineManager")]
         [HttpGet("{id}")]
         public async Task<ActionResult> GetEmployeeById(int id)
         {
@@ -62,7 +62,7 @@ namespace Attendance_system.web.Controllers
             return Ok(response);
         }
 
-        [Authorize(Roles = "CEO,DepartmentManager,LineManager")]
+        [Authorize(Roles = "DepartmentManager,LineManager")]
         [HttpPost]
         public async Task<ActionResult> CreateEmployee([FromBody] CreatedEmployeeDto employee)
         {
@@ -78,7 +78,7 @@ namespace Attendance_system.web.Controllers
             return await Task.FromResult<ActionResult>(CreatedAtAction(nameof(GetEmployeeById), new { id = createdEmployeeId }, response));
         }
 
-        [Authorize(Roles = "CEO,DepartmentManager,LineManager")]
+        [Authorize(Roles = "DepartmentManager,LineManager")]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateEmployee([FromBody] UpdatedEmployeeDto employee, int id)
         {
@@ -104,7 +104,7 @@ namespace Attendance_system.web.Controllers
             return Ok(response);
         }
 
-        [Authorize(Roles = "CEO,DepartmentManager,LineManager")]
+        [Authorize(Roles = "DepartmentManager,LineManager")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteEmployee(int id)
         {

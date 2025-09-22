@@ -44,7 +44,7 @@ namespace Attendance_system.web.Controllers
         }
 
 
-        [Authorize(Roles = "DepartmentManager")]
+        [Authorize(Roles = "CEO")]
         [HttpGet("manager-report/{managerId}")]
         public async Task<IActionResult> GetManagerAttendanceReport(int managerId)
         {
@@ -74,7 +74,7 @@ namespace Attendance_system.web.Controllers
             return Ok(successResponse);
         }
 
-
+        [Authorize(Roles = "DepartmentManager")]
         [HttpGet("department-manager/line-manager-summaries")]
         public async Task<IActionResult> GetLineManagerSummaries(
             [FromQuery] int departmentManagerId,
@@ -114,7 +114,7 @@ namespace Attendance_system.web.Controllers
             });
         }
 
-
+        [Authorize(Roles = "CEO")]
         [HttpGet("ceo/department-summaries")]
         public async Task<IActionResult> GetDepartmentSummariesForCeo(
             [FromQuery] DateTime startDate,

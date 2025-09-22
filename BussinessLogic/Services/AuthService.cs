@@ -22,66 +22,27 @@ public class AuthService : IAuthService
         _config = config;
     }
 
-    public async Task<ApiResponse<string>> Register(CreatedEmployeeDto dto)
+    public async Task<ApiResponse<bool>> Register(CreatedEmployeeDto dto)
     {
-        var exists = await _unitOfWork.EmployeeRepository
-            .AnyAsync(e => e.UserName == dto.UserName || e.Email == dto.Email);
-
+        var exists = await _unitOfWork.EmployeeRepository.AnyAsync(e => e.UserName == dto.UserName);
         if (exists)
-        {
-            return new ApiResponse<string>
-            {
-                Code = 400,
-                Status = "Error",
-                Message = "Username or Email already exists",
-                Data = null
-            };
-        }
-
-        var allowedRoles = new[] { "CEO", "DepartmentManager", "LineManager" };
-        if (!allowedRoles.Contains(dto.Role))
-        {
-            return new ApiResponse<string>
-            {
-                Code = 400,
-                Status = "Error",
-                Message = "Invalid role. Allowed roles: CEO, DepartmentManager, LineManager",
-                Data = null
-            };
-        }
-
-        if (string.IsNullOrWhiteSpace(dto.Password) || dto.Password.Length < 6)
-        {
-            return new ApiResponse<string>
-            {
-                Code = 400,
-                Status = "Error",
-                Message = "Password must be at least 6 characters long",
-                Data = null
-            };
-        }
+            return new ApiResponse<bool> { Code = 400, Status = "error", Message = "User already exists" };
 
         var employee = new Employee
         {
-            Fname = dto.FirstName,
-            Lname = dto.LastName,
-            Email = dto.Email,
             UserName = dto.UserName,
-            Dept_Id = dto.Dept_Id,
-            Line_Manager_Id = dto.Line_Manager_Id,
-            Role = dto.Role,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password)
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+            Role = dto.Role
         };
 
         await _unitOfWork.EmployeeRepository.AddAsync(employee);
-              _unitOfWork.Complete();
 
-        return new ApiResponse<string>
+        return new ApiResponse<bool>
         {
-            Code = 201,
-            Status = "Success",
-            Message = "Registration successful",
-            Data = null
+            Code = 200,
+            Status = "success",
+            Message = "User registered successfully",
+            Data = true
         };
     }
 
@@ -90,16 +51,8 @@ public class AuthService : IAuthService
         var user = (await _unitOfWork.EmployeeRepository.GetAllASync())
                         .FirstOrDefault(e => e.UserName == username);
 
-        if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
-        {
-            return new ApiResponse<string>
-            {
-                Code = 401,
-                Status = "Error",
-                Message = "Invalid credentials",
-                Data = null
-            };
-        }
+        if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
+            return new ApiResponse<string> { Code = 401, Status = "error", Message = "Invalid credentials" };
 
         var token = GenerateJwtToken(user);
 
