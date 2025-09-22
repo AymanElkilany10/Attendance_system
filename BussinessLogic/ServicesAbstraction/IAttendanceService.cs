@@ -11,5 +11,8 @@ namespace BussinessLogic.ServicesAbstraction
     {
         Task<EmployeeAttendanceReportDto?> GetEmployeeAttendanceReport(int employeeId);
         public  Task<List<EmployeeAttendanceReportDto>> GetReportsForManager(int managerId);
+        Task<List<LineManagerTeamSummaryDto>> GetLineManagerSummariesByDepartmentManagerAsync(int departmentManagerId, DateTime startDate, DateTime endDate);
+        Task<List<DepartmentSummaryForCeoDto>> GetDepartmentSummariesForCeoAsync(DateTime startDate, DateTime endDate);
+
     }
 }
