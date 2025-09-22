@@ -313,7 +313,7 @@ namespace BussinessLogic.Services
 
             await using (var command = connection.CreateCommand())
             {
-                command.CommandText = "GetEmployeeAttendanceRecords";
+                command.CommandText = "GetEmployeeAttendanceReport";
                 command.CommandType = CommandType.StoredProcedure;
 
                 var param = new SqlParameter("@EmployeeId", SqlDbType.Int)

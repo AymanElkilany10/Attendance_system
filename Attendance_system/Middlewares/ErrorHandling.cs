@@ -1,16 +1,19 @@
 ﻿using BussinessLogic.ViewModels;
 using System.Net;
 using System.Text.Json;
+using Microsoft.AspNetCore.Hosting;  
 
 public class ErrorHandling
 {
     private readonly RequestDelegate _next;
     private readonly ILogger<ErrorHandling> _logger;
+    private readonly IWebHostEnvironment _env;
 
-    public ErrorHandling(RequestDelegate next, ILogger<ErrorHandling> logger)
+    public ErrorHandling(RequestDelegate next, ILogger<ErrorHandling> logger, IWebHostEnvironment env)
     {
         _next = next;
         _logger = logger;
+        _env = env;
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -33,6 +36,11 @@ public class ErrorHandling
                 Message = ex.Message,
                 Data = null
             };
+
+            if (_env.IsDevelopment())
+            {
+                response.Data = ex.StackTrace;
+            }
 
             var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 

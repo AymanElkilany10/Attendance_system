@@ -1,4 +1,3 @@
-
 using BussinessLogic.Services;
 using BussinessLogic.ServicesAbstraction;
 using DataAccess.Data._UnitOfWork;
@@ -10,6 +9,7 @@ using DataAccess.Data.Repositories._SubCRepository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using System.Text;
 
 namespace Attendance_system
@@ -23,13 +23,43 @@ namespace Attendance_system
             // Add services to the container.
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                {
+                    In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                    Description = "Please enter token with Bearer prefix",
+                    Name = "Authorization",
+                    Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+                {
+                    {
+                        new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                        {
+                            Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                            {
+                                Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Scheme = "oauth2",
+                            Name = "Bearer",
+                            In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                        },
+                        new List<string>()
+                    }
+                });
+            });
+
             builder.Services.AddDbContext<Attendance_SystemContext>(option =>
             {
                 option.UseSqlServer(builder.Configuration.GetConnectionString("DefualtConnection"));
             });
+
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
@@ -41,35 +71,32 @@ namespace Attendance_system
             builder.Services.AddScoped<ISub_CompanyService, Sub_CompanyService>();
             builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
             builder.Services.AddScoped<IAttendanceService, AttendanceService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
 
-            builder.Services.AddAuthentication("Bearer")
-      .AddJwtBearer("Bearer", options =>
-      {
-          options.TokenValidationParameters = new TokenValidationParameters
-          {
-              ValidateIssuer = true,
-              ValidateAudience = true,
-              ValidateLifetime = true,
-              ValidateIssuerSigningKey = true,
-              ValidIssuer = builder.Configuration["Jwt:Issuer"],
-              ValidAudience = builder.Configuration["Jwt:Audience"],
-              IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-          };
-      });
 
-            builder.Services.AddAuthorization(options =>
-            {
-                options.AddPolicy("CEOOnly", policy => policy.RequireRole("CEO"));
-                options.AddPolicy("DeptManagerOnly", policy => policy.RequireRole("DepartmentManager"));
-                options.AddPolicy("LineManagerOnly", policy => policy.RequireRole("LineManager"));
-            });
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+     .AddJwtBearer(options =>
+     {
+         options.TokenValidationParameters = new TokenValidationParameters
+         {
+             ValidateIssuer = true,
+             ValidateAudience = true,
+             ValidateLifetime = true,
+             ValidateIssuerSigningKey = true,
+             ValidIssuer = builder.Configuration["Jwt:Issuer"],
+             ValidAudience = builder.Configuration["Jwt:Audience"],
+             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+             RoleClaimType = ClaimTypes.Role 
+         };
+     });
+
 
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }

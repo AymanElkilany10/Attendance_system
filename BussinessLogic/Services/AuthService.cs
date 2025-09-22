@@ -36,6 +36,7 @@ public class AuthService : IAuthService
         };
 
         await _unitOfWork.EmployeeRepository.AddAsync(employee);
+        _unitOfWork.Complete();  
 
         return new ApiResponse<bool>
         {
@@ -46,10 +47,14 @@ public class AuthService : IAuthService
         };
     }
 
+
     public async Task<ApiResponse<string>> Login(string username, string password)
     {
         var user = (await _unitOfWork.EmployeeRepository.GetAllASync())
                         .FirstOrDefault(e => e.UserName == username);
+
+        if (user == null)
+            return new ApiResponse<string> { Code = 401, Status = "error", Message = "Invalid credentials" };
 
         if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
             return new ApiResponse<string> { Code = 401, Status = "error", Message = "Invalid credentials" };
@@ -64,6 +69,7 @@ public class AuthService : IAuthService
             Data = token
         };
     }
+
 
     private string GenerateJwtToken(Employee user)
     {

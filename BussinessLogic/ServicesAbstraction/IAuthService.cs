@@ -6,7 +6,7 @@ namespace BussinessLogic.ServicesAbstraction
 {
     public interface IAuthService
     {
-        Task<ApiResponse<string>> Register(CreatedEmployeeDto dto);
+        Task<ApiResponse<bool>> Register(CreatedEmployeeDto dto);
         Task<ApiResponse<string>> Login(string username, string password);
     }
 }
