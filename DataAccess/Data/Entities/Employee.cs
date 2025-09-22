@@ -25,6 +25,7 @@ public partial class Employee : BaseEntity
 
     [StringLength(50)]
     public string Email { get; set; }
+    public string Role { get; set; }
 
     public bool Is_Manager { get; set; }
     public int? Line_Manager_Id { get; set; }
