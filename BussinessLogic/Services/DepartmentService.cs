@@ -19,7 +19,7 @@ namespace BussinessLogic.Services
         private readonly IUnitOfWork _unitOfWork;
 
         public DepartmentService(IUnitOfWork unitOfWork) {
-            _unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork
         }
 
         public async Task<IEnumerable<Department>> GetAllDepartmentsASync()
