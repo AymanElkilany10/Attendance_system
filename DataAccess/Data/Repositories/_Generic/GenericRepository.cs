@@ -28,13 +28,11 @@ namespace DataAccess.Data.Repositories._GenericRepository
 
 
         public async Task AddAsync(T entity) => await _context.Set<T>().AddAsync(entity);
-
+        
         public async Task<bool> UpdateAsync(T entity) {
               _context.Set<T>().Update(entity);
-            return await _context.SaveChangesAsync() > 0;
+             return await _context.SaveChangesAsync() > 0;
         }
-
-  
 
         public async Task<bool> DeleteAsync(T entity)
         {

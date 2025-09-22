@@ -32,9 +32,8 @@ namespace Attendance_system
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
             builder.Services.AddScoped<ISubCompanyRepository, SubCompanyRepository>();
-            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-
             builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
+
             builder.Services.AddScoped<IDepartmentService, DepartmentService>();
             builder.Services.AddScoped<ISub_CompanyService, Sub_CompanyService>();
             builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
