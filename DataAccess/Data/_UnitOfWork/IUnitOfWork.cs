@@ -23,7 +23,6 @@ namespace DataAccess.Data._UnitOfWork
         IAttendanceRepository AttendanceRepository { get; }
         ISubCompanyRepository SubCompanyRepository { get; }
 
-
         public int Complete();
         public void Dispose();
     }

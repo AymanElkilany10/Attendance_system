@@ -20,7 +20,7 @@ public partial class Department : BaseEntity
 
     public int sub_id { get; set; }
 
-    public int Manager_Id { get; set; }
+    public int? Manager_Id { get; set; }
 
     [InverseProperty("Dept")]
     public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
