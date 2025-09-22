@@ -10,6 +10,7 @@ namespace BussinessLogic.Models._DepartmentDto
     public class UpdatedDepartmentDto
     {
         public string? dept_name { get; set; }
+
         public int sub_id { get; set; }
         public int? Manager_Id { get; set; }
     }

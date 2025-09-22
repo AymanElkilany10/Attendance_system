@@ -1,5 +1,6 @@
 ﻿using BussinessLogic.ServicesAbstraction;
 using BussinessLogic.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +17,7 @@ namespace Attendance_system.web.Controllers
             _attendanceService = attendanceService;
         }
 
-
+        [Authorize(Roles = "LineManager")]
         [HttpGet("employee/{employeeId}")]
         public async Task<IActionResult> GetEmployeeAttendanceReport(int employeeId)
         {
@@ -43,7 +44,7 @@ namespace Attendance_system.web.Controllers
         }
 
 
-
+        [Authorize(Roles = "CEO")]
         [HttpGet("manager-report/{managerId}")]
         public async Task<IActionResult> GetManagerAttendanceReport(int managerId)
         {
@@ -73,7 +74,7 @@ namespace Attendance_system.web.Controllers
             return Ok(successResponse);
         }
 
-
+        [Authorize(Roles = "DepartmentManager")]
         [HttpGet("department-manager/line-manager-summaries")]
         public async Task<IActionResult> GetLineManagerSummaries(
             [FromQuery] int departmentManagerId,
@@ -113,7 +114,7 @@ namespace Attendance_system.web.Controllers
             });
         }
 
-
+        [Authorize(Roles = "CEO")]
         [HttpGet("ceo/department-summaries")]
         public async Task<IActionResult> GetDepartmentSummariesForCeo(
             [FromQuery] DateTime startDate,
