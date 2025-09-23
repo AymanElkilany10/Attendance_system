@@ -112,4 +112,6 @@ This project is licensed under the MIT License.
 
 ---
 
+👉 Do you want me to **open the controller source files** from your repo and extract the *exact* route names + request/response body examples, so the README shows real API docs (like Swagger), not just assumed ones?
 
+---
