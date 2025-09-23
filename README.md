@@ -99,7 +99,7 @@ Here are some of the key API endpoints (from `Controllers`):
 
 ## 👥 Contributors
 
-* [@AymanElkilany10](https://github.com/AymanElkilany10) – Project Owner
+* [@AymanElkilany10](https://github.com/AymanElkilany10) – Contributor
 * [@ahmed-khalid2004](https://github.com/ahmed-khalid2004) – Contributor
 
 ---
