@@ -16,7 +16,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register(CreatedEmployeeDto dto)
+    public async Task<IActionResult> Register([FromBody] CreatedEmployeeDto dto)
     {
         var response = await _authService.Register(dto);
         return StatusCode(response.Code, response);
@@ -28,4 +28,6 @@ public class AuthController : ControllerBase
         var response = await _authService.Login(username, password);
         return StatusCode(response.Code, response);
     }
+
+
 }

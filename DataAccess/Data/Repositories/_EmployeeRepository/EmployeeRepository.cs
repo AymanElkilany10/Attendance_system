@@ -14,6 +14,14 @@ namespace DataAccess.Data.Repositories._EmployeeRepository
         {
         }
 
+        public override async Task<IEnumerable<Employee>> GetAllASync()
+        {
+            return await _context.Set<Employee>()
+                         .Include(e => e.Dept)
+                         .Where(e => !e.IsDeleted)
+                         .ToListAsync();
+        }
+
         public async Task<bool> AnyAsync(Expression<Func<Employee, bool>> predicate)
         {
             return await _context.Employees.AnyAsync(predicate);

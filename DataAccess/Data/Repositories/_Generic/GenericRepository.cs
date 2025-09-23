@@ -17,7 +17,7 @@ namespace DataAccess.Data.Repositories._GenericRepository
         {
            _context = context;
         }
-        public async Task<IEnumerable<T>> GetAllASync()
+        public virtual async Task<IEnumerable<T>> GetAllASync()
         { 
             return await _context.Set<T>().Where(e => !e.IsDeleted).ToListAsync(); 
         }

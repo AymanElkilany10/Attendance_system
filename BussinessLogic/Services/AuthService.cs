@@ -36,7 +36,7 @@ public class AuthService : IAuthService
         };
 
         await _unitOfWork.EmployeeRepository.AddAsync(employee);
-        _unitOfWork.Complete();  
+        _unitOfWork.Complete();
 
         return new ApiResponse<bool>
         {
@@ -56,10 +56,20 @@ public class AuthService : IAuthService
         if (user == null)
             return new ApiResponse<string> { Code = 401, Status = "error", Message = "Invalid credentials" };
 
+        if (string.IsNullOrWhiteSpace(user.PasswordHash) || !user.PasswordHash.StartsWith("$2"))
+        {
+            return new ApiResponse<string>
+            {
+                Code = 500,
+                Status = "error",
+                Message = "Stored password hash is invalid or not using bcrypt format."
+            };
+        }
+
         if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
             return new ApiResponse<string> { Code = 401, Status = "error", Message = "Invalid credentials" };
 
-        var token = GenerateJwtToken(user);
+    var token = GenerateJwtToken(user);
 
         return new ApiResponse<string>
         {

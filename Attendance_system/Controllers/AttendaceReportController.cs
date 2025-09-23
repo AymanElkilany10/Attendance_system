@@ -116,9 +116,7 @@ namespace Attendance_system.web.Controllers
 
         [Authorize(Roles = "CEO")]
         [HttpGet("ceo/department-summaries")]
-        public async Task<IActionResult> GetDepartmentSummariesForCeo(
-            [FromQuery] DateTime startDate,
-            [FromQuery] DateTime endDate)
+        public async Task<IActionResult> GetDepartmentSummariesForCeo([FromQuery] DateTime startDate,[FromQuery] DateTime endDate)
         {
             if (startDate > endDate)
             {
