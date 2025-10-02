@@ -25,9 +25,9 @@ This project follows a **layered architecture** (Presentation, Business Logic, D
 
 ## 🛠️ Tools & Technologies  
 
-- **Backend Framework**: [ASP.NET Core Web API](https://dotnet.microsoft.com/)  
-- **Database**: [SQL Server](https://www.microsoft.com/en-us/sql-server)  
-- **ORM**: [Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/) (Code-First with Migrations)  
+- **Backend Framework**: [ASP.NET Core Web API]
+- **Database**: [SQL Server]  
+- **ORM**: [Entity Framework Core] (Database-First Approach)  
 - **Language**: C#  
 - **Dependency Injection**: Built-in .NET Core DI container  
 - **Version Control**: Git & GitHub  
